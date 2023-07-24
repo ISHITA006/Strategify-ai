@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken')
 const config = require('../auth.config')
 const  Review  = require('../model/raw_reviews');
 let jsonData = require('../reviews_clean.json');
+let fashionData = require('../womens_clothing_reviews_clean.json');
 
 
 router.post('/api/addRawReview', async(req, res) => {
@@ -89,6 +90,32 @@ router.post('/api/createTempDatabase', async(req, res) => {
                 var reviews = value.reviews
                 const response = await Review.create({
                     "username": username, "productId":id, "productName":key,  "price":price, "rawReviews":reviews
+                    })
+                console.log(response)
+            }
+            return res.json({ status: 'ok' })
+        }
+    
+    catch(error){
+        console.log(error)
+            res.json({status:'error', error:'User token not verified'})
+        } 
+})
+
+router.post('/api/createTempFashionDatabase', async(req, res) => {
+    const { username } = req.body
+    try{
+            if(!username || typeof username !== 'string'){
+                return res.json({status:'error', error:'Invalid username'})
+            }
+
+            for (var key in fashionData) {
+                value = fashionData[key];
+                var ages = value.reviewer_age
+                var productCategory = value.product_category
+                var reviews = value.reviews
+                const response = await Review.create({
+                    "username": username, "productId":key, "productCategory": productCategory, "reviewerAge":ages, "rawReviews":reviews
                     })
                 console.log(response)
             }
