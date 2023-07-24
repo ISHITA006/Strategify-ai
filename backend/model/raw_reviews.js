@@ -1,7 +1,10 @@
 const mongoose = require('mongoose')
 
 const RawReviewsSchema = new mongoose.Schema({
-    username: { type: String, required: true, unique: true },
+    productId: { type: Number, required: true, unique: true },
+    username: { type: String, required: true },
+    productName: { type: String, required: true },
+    price: { type: Number, required: true},
     rawReviews: {type: Array, required:true }
 }, {collection: 'rawReviews'})
 
