@@ -5,8 +5,12 @@ const RawReviewsSchema = new mongoose.Schema({
     username: { type: String, required: true },
     productCategory: { type: String, required: true },
     reviewerAge: { type: Array, required: true},
+    upvotes: { type: Array, required: true},
+    recommend: { type: Array, required: true},
+    rating: { type: Array, required: true},
     rawReviews: {type: Array, required:true },
-    cleanReviews:{type:Array}
+    cleanReviews:{type:Array},
+    summary:{type:Object}
 }, {collection: 'rawReviews'})
 
 const model = mongoose.model('RawReviewsSchema', RawReviewsSchema)

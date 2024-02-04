@@ -66,41 +66,19 @@ router.post('/api/addRawReview', async(req, res) => {
         } 
 })
 
-router.get('/:username', (req, res)=>{
-    const username = req.params.username
-    
-    Review.findOne(username, (err, doc) => {
-        if(!err){ res.send(doc.rawReviews); }
-        else{ console.log('Error in Retreiving student :' + JSON.stringify(err, undefined, 2)); }
-    });
-});
-
-
-router.post('/api/createTempDatabase', async(req, res) => {
-    const { username } = req.body
+router.get('/api/getRawReviews/:productId/:token', async (req, res)=>{
+    const productId = req.params.productId
+    const token = req.params.token
     try{
-            if(!username || typeof username !== 'string'){
-                return res.json({status:'error', error:'Invalid username'})
-            }
-
-            for (var key in jsonData) {
-                value = jsonData[key];
-                var price = Number(value.price)
-                var id =value.id
-                var reviews = value.reviews
-                const response = await Review.create({
-                    "username": username, "productId":id, "productName":key,  "price":price, "rawReviews":reviews
-                    })
-                console.log(response)
-            }
-            return res.json({ status: 'ok' })
-        }
-    
-    catch(error){
-        console.log(error)
-            res.json({status:'error', error:'User token not verified'})
-        } 
-})
+        jwt.verify(token, config.secret)
+        const doc = await Review.findOne({ productId }).lean()
+        return res.send(doc.rawReviews);
+    }
+    catch(err){
+        console.log(err)
+        res.json({status:'error', error: err})
+    } 
+});
 
 router.post('/api/createTempFashionDatabase', async(req, res) => {
     const { username } = req.body
@@ -112,10 +90,15 @@ router.post('/api/createTempFashionDatabase', async(req, res) => {
             for (var key in fashionData) {
                 value = fashionData[key];
                 var ages = value.reviewer_age
+                var upvotes = value.upvotes
+                var recommend = value.recommend
+                var ratings = value.ratings
                 var productCategory = value.product_category
                 var reviews = value.reviews
                 const response = await Review.create({
-                    "username": username, "productId":key, "productCategory": productCategory, "reviewerAge":ages, "rawReviews":reviews
+                    "username": username, "productId":key, "productCategory": productCategory, 
+                    "reviewerAge":ages, "upvotes":upvotes,"recommend":recommend,"ratings":ratings, 
+                    "rawReviews":reviews
                     })
                 console.log(response)
             }
@@ -125,7 +108,7 @@ router.post('/api/createTempFashionDatabase', async(req, res) => {
     catch(error){
         console.log(error)
             res.json({status:'error', error:'User token not verified'})
-        } 
+        }
 })
 
 

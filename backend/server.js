@@ -8,10 +8,8 @@ const cleanReviewsController = require('./controller/cleanReviewController.js');
 require('dotenv').config();
 
 
-mongoose.connect('mongodb://localhost:27017/Marketing_Assist_Dashboard', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
+mongoose.connect('mongodb+srv://ishita201:techfest2024@cluster0.u4xfcnl.mongodb.net/Market_Assist?retryWrites=true&w=majority',
+ { serverApi: { version: '1', strict: true, deprecationErrors: true } });
 const app = express()
 
 app.use('/', express.static(path.join(__dirname, 'static')))
