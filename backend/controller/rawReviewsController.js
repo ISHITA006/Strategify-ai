@@ -80,8 +80,9 @@ router.get('/api/getRawReviews/:productId/:token', async (req, res)=>{
     } 
 });
 
-router.post('/api/createTempFashionDatabase', async(req, res) => {
-    const { username } = req.body
+router.post('/api/createDatabase', async(req, res) => {
+    const { username, data } = req.body
+    fashionData = data
     try{
             if(!username || typeof username !== 'string'){
                 return res.json({status:'error', error:'Invalid username'})

@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken')
 const config = require('../auth.config')
 const  User  = require('../model/user');
 
-router.post('/api/register', async (req, res) =>{
+router.post('/api/register', async (req, res) => {
     console.log(req.body)
     const { username, email, password: plainTextPassword } = req.body
 
@@ -34,7 +34,7 @@ router.post('/api/register', async (req, res) =>{
     }
     catch(error){
         if (error.code === 11000){
-            return res.json({status:'error', error: 'Username, email or metamask address already in use!'})
+            return res.json({status:'error', error: 'Username, email address already in use!'})
         }
         throw error
     }

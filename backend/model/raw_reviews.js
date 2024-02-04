@@ -7,7 +7,7 @@ const RawReviewsSchema = new mongoose.Schema({
     reviewerAge: { type: Array, required: true},
     upvotes: { type: Array, required: true},
     recommend: { type: Array, required: true},
-    rating: { type: Array, required: true},
+    ratings: { type: Array, required: true},
     rawReviews: {type: Array, required:true },
     cleanReviews:{type:Array},
     summary:{type:Object}
