@@ -3,8 +3,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken')
 const config = require('../auth.config')
 const  Review  = require('../model/raw_reviews');
-let jsonData = require('../reviews_clean.json');
-let fashionData = require('../womens_clothing_reviews_clean.json');
+// let fashionData = require('../womens_clothing_reviews_clean.json');
 
 
 router.post('/api/addRawReview', async(req, res) => {
@@ -82,7 +81,7 @@ router.get('/api/getRawReviews/:productId/:token', async (req, res)=>{
 
 router.post('/api/createDatabase', async(req, res) => {
     const { username, data } = req.body
-    fashionData = data
+    fashionData = JSON.parse(data)
     try{
             if(!username || typeof username !== 'string'){
                 return res.json({status:'error', error:'Invalid username'})
@@ -108,7 +107,7 @@ router.post('/api/createDatabase', async(req, res) => {
     
     catch(error){
         console.log(error)
-            res.json({status:'error', error:'User token not verified'})
+            res.json({status:'error', error:'Error'})
         }
 })
 
