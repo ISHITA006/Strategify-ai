@@ -93,12 +93,12 @@ router.get('/api/getProductIds/:username', async (req, res)=>{
     } 
 });
 
-router.get('/api/getRawReviews/:productId/:token', async (req, res)=>{
+router.get('/api/getRawReviews/:username/:productId', async (req, res)=>{
     const productId = req.params.productId
-    const token = req.params.token
+    const username = req.params.username
     try{
-        jwt.verify(token, config.secret)
-        const doc = await Review.findOne({ productId }).lean()
+        // jwt.verify(token, config.secret)
+        const doc = await Review.findOne({ username, productId }).lean()
         return res.send(doc.rawReviews);
     }
     catch(err){
@@ -139,5 +139,38 @@ router.post('/api/createDatabase', async(req, res) => {
         }
 })
 
+router.post('/api/reuploadDatabase', async(req, res) => {
+    const { username, data } = req.body
+    fashionData = JSON.parse(data)
+    try{
+            if(!username || typeof username !== 'string'){
+                return res.json({status:'error', error:'Invalid username'})
+            }
+            const query = { username: username };
+            await Review.deleteMany(query);        
+
+            for (var key in fashionData) {
+                value = fashionData[key];
+                var ages = value.reviewer_age
+                var upvotes = value.upvotes
+                var recommend = value.recommend
+                var ratings = value.ratings
+                var productCategory = value.product_category
+                var reviews = value.reviews
+                const response = await Review.create({
+                    "username": username, "productId":key, "productCategory": productCategory, 
+                    "reviewerAge":ages, "upvotes":upvotes,"recommend":recommend,"ratings":ratings, 
+                    "rawReviews":reviews
+                    })
+                console.log(response)
+            }
+            return res.json({ status: 'ok' })
+        }
+    
+    catch(error){
+        console.log(error)
+            res.json({status:'error', error:'Error'})
+        }
+})
 
 module.exports = router;
