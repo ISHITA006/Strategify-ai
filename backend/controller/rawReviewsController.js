@@ -6,64 +6,64 @@ const  Review  = require('../model/raw_reviews');
 // let fashionData = require('../womens_clothing_reviews_clean.json');
 
 
-router.post('/api/addRawReview', async(req, res) => {
-    const {token, username, productName, productId, review } = req.body
-    console.log(req.body)
-    try{
-        //check if user is verified/logged in
-       jwt.verify(token, config.secret)
+// router.post('/api/addRawReview', async(req, res) => {
+//     const {token, username, productName, productId, review } = req.body
+//     console.log(req.body)
+//     try{
+//         //check if user is verified/logged in
+//        jwt.verify(token, config.secret)
 
-       //check if user document already exists, if yes update tokens to be earned else create new document
-       const user = await Review.findOne({ productId }).lean()
+//        //check if user document already exists, if yes update tokens to be earned else create new document
+//        const user = await Review.findOne({ productId }).lean()
        
-       if(user){
-        const _id = user._id;
-        var oldReviews = user.rawReviews
-        oldReviews.push(review)
-        await Review.updateOne({_id},
-            { $set: { rawReviews:  oldReviews}})
-            return res.json({status:'ok'})
-        }
-        else{
+//        if(user){
+//         const _id = user._id;
+//         var oldReviews = user.rawReviews
+//         oldReviews.push(review)
+//         await Review.updateOne({_id},
+//             { $set: { rawReviews:  oldReviews}})
+//             return res.json({status:'ok'})
+//         }
+//         else{
 
-            if(!username || typeof username !== 'string'){
-                return res.json({status:'error', error:'Invalid username'})
-            }
+//             if(!username || typeof username !== 'string'){
+//                 return res.json({status:'error', error:'Invalid username'})
+//             }
 
-            if(!productName || typeof productName !== 'string'){
-                return res.json({status:'error', error:'Invalid productName'})
-            }
+//             if(!productName || typeof productName !== 'string'){
+//                 return res.json({status:'error', error:'Invalid productName'})
+//             }
 
-            if(!productId || typeof productId !== 'number'){
-                return res.json({status:'error', error:'Invalid productId'})
-            }
+//             if(!productId || typeof productId !== 'number'){
+//                 return res.json({status:'error', error:'Invalid productId'})
+//             }
         
-            if(!review || typeof review !== 'string'){
-                return res.json({status:'error', error:'Invalid review'})
-            }
+//             if(!review || typeof review !== 'string'){
+//                 return res.json({status:'error', error:'Invalid review'})
+//             }
 
-            var rawReviews;
+//             var rawReviews;
 
-            if (typeof review == 'string'){
-                rawReviews = [review]
-            }
-            else{
-                rawReviews = review
-            }
+//             if (typeof review == 'string'){
+//                 rawReviews = [review]
+//             }
+//             else{
+//                 rawReviews = review
+//             }
             
             
-            const response = await Review.create({
-                username, productName, productId, rawReviews
-            })
-            console.log(response);
-            return res.json({ status: 'ok' })
-        }
+//             const response = await Review.create({
+//                 username, productName, productId, rawReviews
+//             })
+//             console.log(response);
+//             return res.json({ status: 'ok' })
+//         }
     
-    } catch(error){
-        console.log(error)
-            res.json({status:'error', error:'User token not verified'})
-        } 
-})
+//     } catch(error){
+//         console.log(error)
+//             res.json({status:'error', error:'User token not verified'})
+//         } 
+// })
 
 router.get('/api/getProductIds/:username', async (req, res)=>{
     const username = req.params.username
@@ -100,6 +100,24 @@ router.get('/api/getRawReviews/:username/:productId', async (req, res)=>{
         // jwt.verify(token, config.secret)
         const doc = await Review.findOne({ username, productId }).lean()
         return res.send(doc.rawReviews);
+    }
+    catch(err){
+        console.log(err)
+        res.json({status:'error', error: err})
+    } 
+});
+
+router.get('/api/getDatabase/:username', async (req, res)=>{
+    const username = req.params.username
+    try{
+        // jwt.verify(token, config.secret)
+        const docs = await Review.find({ username })
+        if (docs.length){
+            return res.send(docs);
+        }
+        else{
+            res.json({status:'error', error: 'No data found for user!'})
+        }
     }
     catch(err){
         console.log(err)
