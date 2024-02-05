@@ -13,7 +13,7 @@ mongoose.connect('mongodb+srv://ishita201:techfest2024@cluster0.u4xfcnl.mongodb.
 const app = express()
 
 app.use('/', express.static(path.join(__dirname, 'static')))
-app.use(bodyParser.json())
+app.use(bodyParser.json({limit: '200mb'}))
 
 app.use('/users', userController);
 app.use('/rawReviews', rawReviewsController);
