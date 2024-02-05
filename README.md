@@ -38,4 +38,4 @@ Frontend set up:
 - Install python on your PC
 - cd /Marketing-Assist-Dashboard/Streamlit
 - pip install -r requirements.txt
-- streamlit run Strategify.AI.py
+- streamlit run Strategify_ai.py
