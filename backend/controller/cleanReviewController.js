@@ -112,7 +112,8 @@ router.post('/api/obtainCleanReview', async(req, res) => {
         
         await Review.updateOne({_id},
             { $set: { cleanReviews:  newReviews, summary: summary}})
-            return res.json({status:'ok'})
+            const response = {"cleanReviews": newReviews, "summary": summary}
+            return res.json(response)
         }
         else{   
             return res.json({status:'error', error:'Product not found'})
@@ -254,13 +255,15 @@ router.post('/api/obtainAllCleanReviews', async(req, res) => {
       } 
 })
 
-router.get('/api/getCleanReviews/:productId/:token', async (req, res)=>{
+router.get('/api/getCleanReviews/:productId/:username', async (req, res)=>{
   const productId = req.params.productId
-  const token = req.params.token
+  const username = req.params.username
   try{
-      jwt.verify(token, config.secret)
-      const doc = await Review.findOne({ productId }).lean()
-      return res.send(doc.cleanReviews);
+      // jwt.verify(token, config.secret)
+      const doc = await Review.findOne({ username, productId }).lean()
+      response = {"cleanReviews": doc.cleanReviews, "rawReviews": doc.rawReviews, 
+      "reviewer_age": doc.reviewerAge, }
+      return res.send(response);
   }
   catch(err){
       console.log(err)

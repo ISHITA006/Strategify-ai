@@ -65,6 +65,34 @@ router.post('/api/addRawReview', async(req, res) => {
         } 
 })
 
+router.get('/api/getProductIds/:username', async (req, res)=>{
+    const username = req.params.username
+    
+    try{
+        // jwt.verify(token, config.secret)
+        const docs = await Review.find({username})
+        if (docs.length){
+        var response = []
+        var productId = {"productCategory": "", "productId": ""}
+        for (var i=0; i<docs.length;i++){
+            const doc = docs[i]
+            const id = doc.productId;
+            const category = doc.productCategory;
+            productId['productId'] = id;
+            productId['productCategory'] = category;
+            response.push(productId)
+        }
+        return res.send(response);
+    }
+        else{
+            return res.json({status:'error', error:'No products found'})
+    }}
+    catch(err){
+        console.log(err)
+        res.json({status:'error', error: err})
+    } 
+});
+
 router.get('/api/getRawReviews/:productId/:token', async (req, res)=>{
     const productId = req.params.productId
     const token = req.params.token
