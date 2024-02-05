@@ -12,31 +12,30 @@ It analyses reviews to understand the customer's sentiment regarding 6 crucial p
 
 After understanding the overall product sentiment, Strategify.ai will present feedback analytics in the form of useful charts, use it to suggest a comprehensive marketing strategy, generate campaign posters and product inspiration ideas.
 
-Demo instructions:
+**Demo instructions:**
+1. Try out our app here: https://strategify-ai.streamlit.app/
+2. Upload "data.csv" file when prompted to upload data on the app. You can use any other women's fashion reviews dataset following the same format as "data.csv" to test our app
 
-Try out our app here: __________________
-Upload "data.csv" file when prompted to upload data on the app. You can use any other women's fashion reviews dataset following the same format as "data.csv" to test our app
-Hackathon Challenges Tackled:
+**Hackathon Challenges Tackled:**
+1. AI Agent - PaLM 2 Model
+2. Text/Content generation - PaLM 2 Model
+3. Image generation - Stable Diffusion Model ( V3 and XL )
 
-AI Agent - PaLM 2 Model
-Text/Content generation - PaLM 2 Model
-Image generation - Stable Diffusion Model ( V3 and XL )
-Components:
+**Components:**
+1. Streamlit frontend (Hosted on Streamlit Share )
+2. Node.js backend (Hosted on Render)
+3. MongoDB database (Hosted on MongoDB Atlas)
 
-Streamlit frontend (Hosted on ______ )
-Node.js backend (Hosted on Render)
-MongoDB database (Hosted on MongoDB Atlas)
-How to run our code
+**How to run our code**
 
 Backend set up:
+- Install nodejs on your PC
+- cd /Marketing-Assist-Dashboard/backend
+- npm install
+- node server.js
 
-Install nodejs on your PC
-cd /Marketing-Assist-Dashboard/backend
-npm install
-node server.js
 Frontend set up:
-
-Install python on your PC
-cd /Marketing-Assist-Dashboard/Streamlit
-pip install -r requirements.txt
-streamlit run Strategify.AI.py
+- Install python on your PC
+- cd /Marketing-Assist-Dashboard/Streamlit
+- pip install -r requirements.txt
+- streamlit run Strategify.AI.py
