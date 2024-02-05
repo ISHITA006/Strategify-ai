@@ -51,14 +51,26 @@ router.post('/api/obtainCleanReview', async(req, res) => {
           });
           
           const result = await client.generateText({model: MODEL_NAME, temperature:0, prompt: {text: prompt,},});
-            const output = result[0]["candidates"][0]["output"];
+          if (result[0]['safetyFeedback'].length){
+            continue
+          }
+          const output = result[0]["candidates"][0]["output"];
             var myArray = output.split("\n");
+            const startInd1 = [0,1,2,3,4,5]
+            const startInd2 = [1,2,3,4,5,6]
+            var startInd = []
+            if (myArray[0]== ""){
+              startInd = startInd2 
+            }
+            else{
+              startInd = startInd1
+            }
             var newReview = {}
             //
-            quality = myArray[1].split("1. ")[1]
+            quality = myArray[startInd[0]].split("1. ")[1]
             quality = quality.trim()
             //
-            style = myArray[2].split("2. ")[1]
+            style = myArray[startInd[1]].split("2. ")[1]
             if (style.includes('NA')){
               style_rating = 0
               style_aspect = 'NA'
@@ -72,16 +84,16 @@ router.post('/api/obtainCleanReview', async(req, res) => {
               style_rating  = Number(style_rating[0])
             }
             //
-            fit = myArray[3].split("3. ")[1]
+            fit = myArray[startInd[2]].split("3. ")[1]
             fit = fit.trim()
             //
-            delivery = myArray[4].split("4. ")[1]
+            delivery = myArray[startInd[3]].split("4. ")[1]
             delivery = delivery.trim()
             //
-            valueForMoney = myArray[5].split("5. ")[1]
+            valueForMoney = myArray[startInd[4]].split("5. ")[1]
             valueForMoney = valueForMoney.trim()
             //
-            customerService = myArray[6].split("6. ")[1]
+            customerService = myArray[startInd[5]].split("6. ")[1]
             if (customerService.includes('NA')){
               customerService_rating = 0
               customerService_aspect = 'NA'
